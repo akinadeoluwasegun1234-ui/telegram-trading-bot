@@ -27,6 +27,20 @@ bot = Bot(token=BOT_TOKEN)
 def get_all_pairs():
     return FOREX_PAIRS + METALS + CRYPTO_PAIRS
 
-
 async def analyze_pair(pair):
-    
+        if pair in CRYPTO_PAIRS:
+        df = get_crypto_data(pair)
+    else:
+        df = get_forex_data(pair)
+
+    if df is None or df.empty:
+        return None
+
+    df = calculate_indicators(df)
+
+    signal, confidence = generate_signal(df)
+
+    if signal == "WAIT":
+        return None
+
+    return format_signal(pair, signal, confidence)
