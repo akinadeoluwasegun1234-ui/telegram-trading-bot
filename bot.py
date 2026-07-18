@@ -53,3 +53,16 @@ async def send_signal(pair):
             text=message,
             parse_mode="HTML"
         )
+async def main():
+    while True:
+        for pair in get_all_pairs():
+            try:
+                await send_signal(pair)
+            except Exception as e:
+                print(f"Error with {pair}: {e}")
+
+        await asyncio.sleep(60)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
