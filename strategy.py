@@ -21,3 +21,29 @@ def calculate_indicators(df):
     df["MACD_SIGNAL"] = macd.macd_signal()
 
     return df
+    def generate_signal(df):
+    """
+    Generate a trading signal based on technical indicators.
+    """
+
+    last = df.iloc[-1]
+
+    buy = (
+        last["EMA20"] > last["EMA50"] and
+        last["RSI"] > 55 and
+        last["MACD"] > last["MACD_SIGNAL"]
+    )
+
+    sell = (
+        last["EMA20"] < last["EMA50"] and
+        last["RSI"] < 45 and
+        last["MACD"] < last["MACD_SIGNAL"]
+    )
+
+    if buy:
+        return "BUY", 85
+
+    if sell:
+        return "SELL", 85
+
+    return "WAIT", 0
