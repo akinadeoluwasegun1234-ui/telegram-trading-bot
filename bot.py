@@ -27,7 +27,6 @@ bot = Bot(token=BOT_TOKEN)
 def get_all_pairs():
     return FOREX_PAIRS + METALS + CRYPTO_PAIRS
 
-# ← Leave one empty line here
 
 async def analyze_pair(pair):
-    ...
+    
