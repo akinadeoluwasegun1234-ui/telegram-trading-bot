@@ -44,3 +44,12 @@ async def analyze_pair(pair):
         return None
 
     return format_signal(pair, signal, confidence)
+async def send_signal(pair):
+    message = await analyze_pair(pair)
+
+    if message:
+        await bot.send_message(
+            chat_id=CHAT_ID,
+            text=message,
+            parse_mode="HTML"
+        )
