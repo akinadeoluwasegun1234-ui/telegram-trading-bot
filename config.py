@@ -5,7 +5,7 @@
 # Leave these blank for now.
 # We'll add them securely later in Render.
 
-BOT_TOKEN = "YOUR_NEW_BOT_TOKEN"
+BOT_TOKEN = "8773158339:AAFwZ0vwda2HEdQjRHcsUkesr6wpuYGCX8U
 
 CHAT_ID = "YOUR_CHANNEL_CHAT_ID"
 
