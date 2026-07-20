@@ -27,8 +27,9 @@ bot = Bot(token=BOT_TOKEN)
 def get_all_pairs():
     return FOREX_PAIRS + METALS + CRYPTO_PAIRS
 
+
 async def analyze_pair(pair):
-        if pair in CRYPTO_PAIRS:
+    if pair in CRYPTO_PAIRS:
         df = get_crypto_data(pair)
     else:
         df = get_forex_data(pair)
@@ -44,6 +45,8 @@ async def analyze_pair(pair):
         return None
 
     return format_signal(pair, signal, confidence)
+
+
 async def send_signal(pair):
     message = await analyze_pair(pair)
 
@@ -53,7 +56,11 @@ async def send_signal(pair):
             text=message,
             parse_mode="HTML"
         )
+
+
 async def main():
+    print("Bot started successfully...")
+
     while True:
         for pair in get_all_pairs():
             try:
