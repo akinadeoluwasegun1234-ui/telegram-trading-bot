@@ -7,8 +7,7 @@
 
 BOT_TOKEN = "8773158339:AAFwZ0vwda2HEdQjRHcsUkesr6wpuYGCX8U
 
-CHAT_ID = "YOUR_CHANNEL_CHAT_ID"
-
+CHAT_ID = "-1003788309533"
 
 # ==========================
 # BOT SETTINGS
