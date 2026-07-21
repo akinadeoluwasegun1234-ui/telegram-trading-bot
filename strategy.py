@@ -19,32 +19,43 @@ def calculate_indicators(df):
     df["MACD"] = macd.macd()
     df["MACD_SIGNAL"] = macd.macd_signal()
 
+    # Remove rows with missing indicator values
+    df = df.dropna()
+
     return df
 
 
 def generate_signal(df):
     """
-    Generate trading signal
+    Generate BUY / SELL / WAIT signal
     """
 
     last = df.iloc[-1]
 
-    buy = (
-        last["EMA20"] > last["EMA50"]
-        and last["RSI"] > 55
-        and last["MACD"] > last["MACD_SIGNAL"]
-    )
+    score = 0
 
-    sell = (
-        last["EMA20"] < last["EMA50"]
-        and last["RSI"] < 45
-        and last["MACD"] < last["MACD_SIGNAL"]
-    )
+    # EMA Trend
+    if last["EMA20"] > last["EMA50"]:
+        score += 30
+    elif last["EMA20"] < last["EMA50"]:
+        score -= 30
 
-    if buy:
-        return "BUY 🟢", 90
+    # RSI
+    if last["RSI"] > 55:
+        score += 30
+    elif last["RSI"] < 45:
+        score -= 30
 
-    if sell:
-        return "SELL 🔴", 90
+    # MACD
+    if last["MACD"] > last["MACD_SIGNAL"]:
+        score += 30
+    elif last["MACD"] < last["MACD_SIGNAL"]:
+        score -= 30
 
-    return "WAIT", 0
+    if score >= 60:
+        return "BUY 🟢", min(score, 95)
+
+    elif score <= -60:
+        return "SELL 🔴", min(abs(score), 95)
+
+    return "WAIT", abs(score)
