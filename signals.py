@@ -2,24 +2,28 @@ from datetime import datetime, timedelta
 
 
 def format_signal(pair, signal, confidence):
-    entry = datetime.now()
+    """
+    Format Telegram signal message
+    """
 
-    expiry = entry + timedelta(minutes=1)
+    entry_time = datetime.now()
+
+    expiry_time = entry_time + timedelta(minutes=1)
 
     return f"""
-🚀 JOHN AI TRADING SIGNAL
+🚀 <b>JOHN AI TRADING SIGNAL</b>
 
-📊 Pair: {pair}
+📊 <b>Pair:</b> {pair}
 
-📈 Signal: {signal}
+📈 <b>Signal:</b> {signal}
 
-🎯 Confidence: {confidence}%
+🎯 <b>Confidence:</b> {confidence}%
 
-⏰ Entry Time: {entry.strftime("%H:%M:%S")}
+⏰ <b>Entry Time:</b> {entry_time.strftime("%H:%M:%S")}
 
-⌛ Expiry Time: {expiry.strftime("%H:%M:%S")}
+⌛ <b>Expiry Time:</b> {expiry_time.strftime("%H:%M:%S")}
 
-🕒 Timeframe: 1 Minute
+🕒 <b>Timeframe:</b> 1 Minute
 
 ⚠️ Risk only 1–2% of your account per trade.
 """
