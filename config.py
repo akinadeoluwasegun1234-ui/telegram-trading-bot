@@ -5,10 +5,8 @@
 # Leave these blank for now.
 # We'll add them securely later in Render.
 
-BOT_TOKEN = "8773158339:AAFwZ0vwda2HEdQjRHcsUkesr6wpuYGCX8U
-
-CHAT_ID = "-1003788309533"
-TWELVE_DATA_API_KEY = "debd0a333ac44b5bbc1ccf02876c546e
+BOT_TOKEN = "8773158339:AAFwZ0vwda2HEdQjRHcsUkesr6wpuYGCX8U"
+TWELVE_DATA_API_KEY = "debd0a333ac44b5bbc1ccf02876c546e"
 
 # ==========================
 # BOT SETTINGS
