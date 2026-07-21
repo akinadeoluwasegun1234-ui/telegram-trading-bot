@@ -3,14 +3,24 @@ import pandas as pd
 
 from config import TWELVE_DATA_API_KEY
 
-# Binance API (Crypto)
+# ==========================
+# BINANCE API (CRYPTO)
+# ==========================
+
 BINANCE_API = "https://api.binance.com/api/v3/klines"
 
-# Twelve Data API (Forex & Metals)
+# ==========================
+# TWELVE DATA API
+# ==========================
+
 TWELVE_API = "https://api.twelvedata.com/time_series"
 
 
 def get_crypto_data(symbol):
+    """
+    Download 1-minute crypto candles from Binance
+    """
+
     symbol = symbol.replace("/", "")
 
     params = {
@@ -19,33 +29,44 @@ def get_crypto_data(symbol):
         "limit": 100
     }
 
-    r = requests.get(BINANCE_API, params=params)
+    try:
+        response = requests.get(BINANCE_API, params=params, timeout=10)
+        response.raise_for_status()
 
-    data = r.json()
+        data = response.json()
 
-    if not isinstance(data, list):
+        if not isinstance(data, list):
+            return None
+
+        df = pd.DataFrame(data)
+
+        df = df.iloc[:, :6]
+
+        df.columns = [
+            "time",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume"
+        ]
+
+        df["time"] = pd.to_datetime(df["time"], unit="ms")
+
+        for col in ["open", "high", "low", "close", "volume"]:
+            df[col] = df[col].astype(float)
+
+        return df
+
+    except Exception as e:
+        print(f"Crypto Error ({symbol}): {e}")
         return None
-
-    df = pd.DataFrame(data)
-
-    df = df.iloc[:, :6]
-
-    df.columns = [
-        "time",
-        "open",
-        "high",
-        "low",
-        "close",
-        "volume"
-    ]
-
-    df = df.astype(float)
-
-    return df
 
 
 def get_forex_data(symbol):
-    symbol = symbol.replace("/", "")
+    """
+    Download 1-minute Forex/Gold/Silver candles from Twelve Data
+    """
 
     params = {
         "symbol": symbol,
@@ -54,30 +75,41 @@ def get_forex_data(symbol):
         "apikey": TWELVE_DATA_API_KEY
     }
 
-    r = requests.get(TWELVE_API, params=params)
+    try:
+        response = requests.get(TWELVE_API, params=params, timeout=10)
+        response.raise_for_status()
 
-    data = r.json()
+        data = response.json()
 
-    if "values" not in data:
+        if "values" not in data:
+            print(data)
+            return None
+
+        df = pd.DataFrame(data["values"])
+
+        df = df.rename(columns={"datetime": "time"})
+
+        for col in ["open", "high", "low", "close"]:
+            df[col] = df[col].astype(float)
+
+        if "volume" not in df.columns:
+            df["volume"] = 0
+
+        df["volume"] = df["volume"].astype(float)
+
+        df = df[[
+            "time",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume"
+        ]]
+
+        df = df.iloc[::-1].reset_index(drop=True)
+
+        return df
+
+    except Exception as e:
+        print(f"Forex Error ({symbol}): {e}")
         return None
-
-    df = pd.DataFrame(data["values"])
-
-    df = df.rename(columns={
-        "datetime": "time"
-    })
-
-    df = df[[
-        "time",
-        "open",
-        "high",
-        "low",
-        "close",
-        "volume"
-    ]]
-
-    df[["open", "high", "low", "close", "volume"]] = df[
-        ["open", "high", "low", "close", "volume"]
-    ].astype(float)
-
-    return df
