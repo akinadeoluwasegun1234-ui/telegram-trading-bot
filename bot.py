@@ -59,9 +59,11 @@ async def send_signal(pair):
 
 
 async def main():
-    print("Bot started successfully...")
+    print("🚀 JOHN AI Trading Bot Started...")
 
     while True:
+        print("Scanning market...")
+
         for pair in get_all_pairs():
             try:
                 await send_signal(pair)
