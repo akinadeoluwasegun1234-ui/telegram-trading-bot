@@ -1,1 +1,7 @@
-
+services:
+  - type: worker
+    name: john-ai-trading-bot
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    plan: free
